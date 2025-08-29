@@ -1,20 +1,20 @@
 const ions = {
     // Metals (Cations)
-    "Sodium": ["Na", "1"],
-    "Potassium": ["K", "1"],
-    "Silver": ["Ag", "1"],
-    "Hydrogen": ["H", "1"],
-    "Ammonium": ["NH4", "1"],
-    "Copper (I)": ["Cu", "1"],
-    "Magnesium": ["Mg", "2"],
-    "Calcium": ["Ca", "2"],
-    "Zinc": ["Zn", "2"],
-    "Iron (II) (Ferrous)": ["Fe", "2"],
-    "Copper (II)": ["Cu", "2"],
-    "Lead (II)": ["Pb", "2"],
-    "Barium": ["Ba", "2"],
-    "Aluminium": ["Al", "3"],
-    "Iron (III) (Ferric)": ["Fe", "3"],
+    "Sodium": ["Na", "+1"],
+    "Potassium": ["K", "+1"],
+    "Silver": ["Ag", "+1"],
+    "Hydrogen": ["H", "+1"],
+    "Ammonium": ["NH4", "+1"],
+    "Copper (I)": ["Cu", "+1"],
+    "Magnesium": ["Mg", "+2"],
+    "Calcium": ["Ca", "+2"],
+    "Zinc": ["Zn", "+2"],
+    "Iron (II) (Ferrous)": ["Fe", "+2"],
+    "Copper (II)": ["Cu", "+2"],
+    "Lead (II)": ["Pb", "+2"],
+    "Barium": ["Ba", "+2"],
+    "Aluminium": ["Al", "+3"],
+    "Iron (III) (Ferric)": ["Fe", "+3"],
     // Non-metallic and Polyatomic Ions (Anions)
     "Hydride": ["H", "-1"],
     "Chloride": ["Cl", "-1"],
@@ -76,7 +76,7 @@ function parseIonAnswer(text) {
         .trim();
     let parts = t.split(' ');
     if (parts.length === 1) {
-        let match = parts[0].match(/^([A-Za-z0-9]+)(\d+)$/);
+        let match = parts[0].match(/^([A-Za-z0-9]+)([+-]\d+)$/);
         if (match) {
             let sym = match[1];
             let val = match[2];
@@ -85,7 +85,7 @@ function parseIonAnswer(text) {
         return null;
     } else {
         let sym = parts[0];
-        let valMatch = parts[1].match(/\d+/);
+        let valMatch = parts[1].match(/[+-]\d+/);
         if (!valMatch) return null;
         let val = valMatch[0];
         return [sym, val];
@@ -174,8 +174,7 @@ class QuizApp {
             if (parsed) {
                 let [userSym, userVal] = parsed;
                 try {
-                    let expectedValency = correctValency.replace(/[-+]/g, '');
-                    if (userSym.toLowerCase() === correctSymbol.toLowerCase() && userVal === expectedValency) {
+                    if (userSym.toLowerCase() === correctSymbol.toLowerCase() && userVal === correctValency) {
                         isCorrect = true;
                     }
                 } catch (e) {
