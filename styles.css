@@ -24,3 +24,82 @@ body {
 #section-title {
     color: #2b6cb0;
 }
+
+#credits {
+    color: #6b7280;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+    #quiz-container {
+        padding: 1rem;
+        margin: 1rem;
+        max-width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #instructions {
+        font-size: 0.875rem;
+        margin-bottom: 1rem;
+    }
+
+    #section-title {
+        font-size: 1.125rem;
+        margin-bottom: 0.75rem;
+    }
+
+    #question {
+        font-size: 1.125rem;
+        margin-bottom: 1.5rem;
+    }
+
+    #answer-input {
+        font-size: 1rem;
+        padding: 0.5rem;
+        margin-bottom: 0.75rem;
+    }
+
+    #submit-button {
+        font-size: 1rem;
+        padding: 0.5rem;
+    }
+
+    #feedback {
+        font-size: 0.875rem;
+        min-height: 2rem;
+        margin-top: 0.75rem;
+    }
+
+    #score, #streak, #progress {
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+
+    #result-container {
+        margin-top: 1rem;
+    }
+
+    #final-score {
+        font-size: 1.25rem;
+    }
+
+    #wrong-title {
+        font-size: 1rem;
+        margin-top: 0.75rem;
+    }
+
+    #wrong-answers {
+        font-size: 0.75rem;
+        padding: 0.75rem;
+        max-height: 16rem;
+    }
+
+    #credits {
+        font-size: 0.75rem;
+        margin-top: 1rem;
+    }
+}
