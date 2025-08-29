@@ -1,0 +1,26 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+#quiz-container {
+    max-width: 950px;
+    margin: 0 auto;
+}
+
+#answer-input {
+    font-size: 1.125rem;
+    padding: 0.75rem;
+}
+
+#feedback {
+    min-height: 2.5rem;
+}
+
+#wrong-answers {
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+#section-title {
+    color: #2b6cb0;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div id="quiz-container" class="bg-white p-8 rounded-lg shadow-lg w-full max-w-3xl">
+        <h1 class="text-3xl font-bold text-center mb-6">⚛ Chemistry Quiz ⚛</h1>
+        <p id="instructions" class="text-center text-gray-700 mb-6">
+            Answer format:<br>
+            For Ions → (Symbol, Valency number). Examples: Na,1 OR Na 1 OR Na1<br>
+            For Compounds → Formula only (e.g., CaO)
+        </p>
+        <h2 id="section-title" class="text-xl font-semibold text-center mb-4 text-blue-800"></h2>
+        <h2 id="question" class="text-xl font-bold text-center mb-8"></h2>
+        <input id="answer-input" type="text" class="w-full p-3 text-lg border rounded-lg mb-4 text-center" placeholder="Enter your answer">
+        <button id="submit-button" class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600">Submit Answer</button>
+        <p id="feedback" class="text-center mt-4"></p>
+        <p id="score" class="text-center mt-2 font-bold text-green-700">Score: 0</p>
+        <p id="streak" class="text-center mt-2 text-red-600">🔥 Streak: 0</p>
+        <p id="progress" class="text-center mt-2">Section Progress: 0/0</p>
+        <div id="result-container" class="hidden mt-6">
+            <h2 id="final-score" class="text-2xl font-bold text-center text-blue-900"></h2>
+            <h3 id="wrong-title" class="text-lg font-bold mt-4"></h3>
+            <div class="relative max-h-96 overflow-y-auto">
+                <pre id="wrong-answers" class="text-sm p-4 bg-gray-50 rounded-lg"></pre>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
