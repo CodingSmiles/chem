@@ -3,7 +3,6 @@ const ions = {
     "Sodium": ["Na", "+1"],
     "Potassium": ["K", "+1"],
     "Silver": ["Ag", "+1"],
-    "Hydrogen": ["H", "+1"],
     "Copper (I)": ["Cu", "+1"],
     "Magnesium": ["Mg", "+2"],
     "Calcium": ["Ca", "+2"],
@@ -15,6 +14,7 @@ const ions = {
     "Aluminium": ["Al", "+3"],
     "Iron (III) (Ferric)": ["Fe", "+3"],
     // Non-metallic and Polyatomic Ions (Anions)
+    "Hydrogen": ["H", "+1"],
     "Ammonium": ["NH4", "+1"],
     "Hydride": ["H", "-1"],
     "Chloride": ["Cl", "-1"],
@@ -95,8 +95,8 @@ function parseIonAnswer(text) {
 class QuizApp {
     constructor() {
         // Define metal and non-metal/polyatomic ions
-        const metalIons = ["Sodium", "Potassium", "Silver", "Hydrogen",  "Copper (I)", "Magnesium", "Calcium", "Zinc", "Iron (II) (Ferrous)", "Copper (II)", "Lead (II)", "Barium", "Aluminium", "Iron (III) (Ferric)"];
-        const nonMetalPolyIons = ["Hydride", "Chloride", "Bromide", "Iodide", "Hydroxide", "Ammonium", "Nitrate", "Hydrogen carbonate (Bicarbonate)", "Oxide", "Sulphide", "Carbonate", "Sulphite", "Sulphate", "Nitride", "Phosphate"];
+        const metalIons = ["Sodium", "Potassium", "Silver",  "Copper (I)", "Magnesium", "Calcium", "Zinc", "Iron (II) (Ferrous)", "Copper (II)", "Lead (II)", "Barium", "Aluminium", "Iron (III) (Ferric)"];
+        const nonMetalPolyIons = ["Hydride", "Chloride", "Hydrogen", "Bromide", "Iodide", "Hydroxide", "Ammonium", "Nitrate", "Hydrogen carbonate (Bicarbonate)", "Oxide", "Sulphide", "Carbonate", "Sulphite", "Sulphate", "Nitride", "Phosphate"];
 
         // Create question pools for each section
         this.metalQuestions = metalIons.map(name => ['ion', name]).sort(() => Math.random() - 0.5);
