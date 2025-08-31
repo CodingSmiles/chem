@@ -1,5 +1,4 @@
-const ions = {
-    // Metals (Cations)
+const metalIons = {
     "Sodium": ["Na", "+1"],
     "Potassium": ["K", "+1"],
     "Silver": ["Ag", "+1"],
@@ -12,8 +11,10 @@ const ions = {
     "Lead (II)": ["Pb", "+2"],
     "Barium": ["Ba", "+2"],
     "Aluminium": ["Al", "+3"],
-    "Iron (III) (Ferric)": ["Fe", "+3"],
-    // Non-metallic and Polyatomic Ions
+    "Iron (III) (Ferric)": ["Fe", "+3"]
+};
+
+const nonMetalPolyIons = {
     "Hydrogen": ["H", "+1"],
     "Ammonium": ["NH4", "+1"],
     "Hydride": ["H", "-1"],
@@ -29,7 +30,7 @@ const ions = {
     "Sulphite": ["SO3", "-2"],
     "Sulphate": ["SO4", "-2"],
     "Nitride": ["N", "-3"],
-    "Phosphate": ["PO4", "-3"],
+    "Phosphate": ["PO4", "-3"]
 };
 
 const compounds = {
@@ -40,11 +41,13 @@ const compounds = {
     "Carbonic acid": "H2CO3",
     "Phosphoric acid": "H3PO4",
     "Acetic acid": "CH3COOH",
+    "Methanoic Acid": "HCOOH",
     // Important Bases
     "Sodium hydroxide": "NaOH",
     "Potassium hydroxide": "KOH",
     "Calcium hydroxide (Slaked lime)": "Ca(OH)2",
     "Ammonium hydroxide": "NH4OH",
+    "Milk of Magnesia": "Mg(OH)2",
     // Important Salts & Compounds
     "Sodium chloride (Common salt)": "NaCl",
     "Baking soda": "NaHCO3",
@@ -94,14 +97,10 @@ function parseIonAnswer(text) {
 
 class QuizApp {
     constructor() {
-        // Define metal and non-metal/polyatomic ions
-        const metalIons = ["Sodium", "Potassium", "Silver", "Copper (I)", "Magnesium", "Calcium", "Zinc", "Iron (II) (Ferrous)", "Copper (II)", "Lead (II)", "Barium", "Aluminium", "Iron (III) (Ferric)"];
-        const nonMetalPolyIons = ["Hydrogen", "Ammonium", "Hydride", "Chloride", "Bromide", "Iodide", "Hydroxide", "Nitrate", "Hydrogen carbonate (Bicarbonate)", "Oxide", "Sulphide", "Carbonate", "Sulphite", "Sulphate", "Nitride", "Phosphate"];
-
         // Create question pools for each section
         this.sections = {
-            metals: { name: "Metals", questions: metalIons.map(name => ['ion', name]), index: 0 },
-            nonMetalPoly: { name: "Non-metallic and Polyatomic Ions", questions: nonMetalPolyIons.map(name => ['ion', name]), index: 0 },
+            metals: { name: "Metals", questions: Object.keys(metalIons).map(name => ['ion', name]), index: 0 },
+            nonMetalPoly: { name: "Non-metallic and Polyatomic Ions", questions: Object.keys(nonMetalPolyIons).map(name => ['ion', name]), index: 0 },
             compounds: { name: "Compounds", questions: Object.keys(compounds).map(name => ['compound', name]), index: 0 }
         };
 
@@ -197,7 +196,7 @@ class QuizApp {
         let userAnswer = this.elements.answerInput.value.trim();
         let displayCorrect;
         if (qtype === 'ion') {
-            let [correctSymbol, correctValency] = ions[name];
+            let [correctSymbol, correctValency] = (this.selectedSection.name === "Metals" ? metalIons[name] : nonMetalPolyIons[name]);
             let parsed = parseIonAnswer(userAnswer);
             let isCorrect = false;
             displayCorrect = `${correctSymbol},${correctValency}`;
