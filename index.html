@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,35 +8,53 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
     <div id="quiz-container" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-3xl mx-4">
         <h1 class="text-2xl font-bold text-center mb-4">⚛ Chemistry Quiz ⚛</h1>
-        <p id="instructions" class="text-center text-gray-700 mb-4 text-sm">
-            Answer format:<br>
-            For Ions → (Symbol, Valency with sign). Examples: Na,+1 OR Na +1 OR Na+1<br>
-            For Compounds → Formula only (e.g., CaO)
-        </p>
-        <h2 id="section-title" class="text-lg font-semibold text-center mb-3 text-blue-800"></h2>
-        <h2 id="question" class="text-lg font-bold text-center mb-6"></h2>
-        <input id="answer-input" type="text" class="w-full p-2 text-base border rounded-lg mb-3 text-center" placeholder="Enter your answer">
-        <button id="submit-button" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Submit Answer</button>
-        <p id="feedback" class="text-center mt-3 text-sm"></p>
-        <p id="score" class="text-center mt-2 font-bold text-green-700 text-sm">Score: 0</p>
-        <p id="streak" class="text-center mt-2 text-red-600 text-sm">🔥 Streak: 0</p>
-        <p id="progress" class="text-center mt-2 text-sm">Section Progress: 0/0</p>
-        <div id="result-container" class="hidden mt-4">
-            <h2 id="final-score" class="text-xl font-bold text-center text-blue-900"></h2>
-            <h3 id="wrong-title" class="text-base font-bold mt-3"></h3>
-            <div class="relative max-h-80 overflow-y-auto">
-                <pre id="wrong-answers" class="text-xs p-3 bg-gray-50 rounded-lg"></pre>
+        <div id="section-selection" class="text-center mb-6">
+            <p class="text-gray-700 text-sm mb-4">Select a section to start the quiz:</p>
+            <button id="metals-button"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mr-2">Metals</button>
+            <button id="non-metal-poly-button"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mr-2">Non-metallic & Polyatomic
+                Ions</button>
+            <button id="compounds-button"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Compounds</button>
+        </div>
+        <div id="quiz-content" class="hidden">
+            <p id="instructions" class="text-center text-gray-700 mb-4 text-sm">
+                Answer format:<br>
+                For Ions → (Symbol, Valency with sign). Examples: Na,+1 OR Na +1 OR Na+1<br>
+                For Compounds → Formula only (e.g., CaO)
+            </p>
+            <h2 id="section-title" class="text-lg font-semibold text-center mb-3 text-blue-800"></h2>
+            <h2 id="question" class="text-lg font-bold text-center mb-6"></h2>
+            <input id="answer-input" type="text" class="w-full p-2 text-base border rounded-lg mb-3 text-center"
+                placeholder="Enter your answer">
+            <button id="submit-button" class="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600">Submit
+                Answer</button>
+            <p id="feedback" class="text-center mt-3 text-sm"></p>
+            <p id="score" class="text-center mt-2 font-bold text-green-700 text-sm">Score: 0</p>
+            <p id="streak" class="text-center mt-2 text-red-600 text-sm">🔥 Streak: 0</p>
+            <p id="progress" class="text-center mt-2 text-sm">Section Progress: 0/0</p>
+        </div>
+        <div id="section-choice" class="hidden text-center mt-6">
+            <h2 id="final-score" class="text-xl font-bold text-center text-blue-900 mb-4"></h2>
+            <h3 id="section-choice-wrong-title" class="text-base font-bold mt-3"></h3>
+            <div class="relative max-h-80 overflow-y-auto mb-4">
+                <pre id="section-choice-wrong-answers" class="text-base p-3  rounded text-left"></pre>
             </div>
+            <p class="text-gray-700 text-sm mb-4">Choose an option:</p>
+            <button id="redo-button"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mr-2"></button>
+            <button id="section1-button"
+                class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mr-2"></button>
+            <button id="section2-button" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600"></button>
         </div>
     </div>
-
-    <br>
-    <br>
-    <br>
     <p id="credits" class="text-center text-gray-500 text-xs mt-4">By Aadiraj</p>
     <script src="script.js"></script>
 </body>
+
 </html>

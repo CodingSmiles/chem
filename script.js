@@ -13,7 +13,7 @@ const ions = {
     "Barium": ["Ba", "+2"],
     "Aluminium": ["Al", "+3"],
     "Iron (III) (Ferric)": ["Fe", "+3"],
-    // Non-metallic and Polyatomic Ions (Anions)
+    // Non-metallic and Polyatomic Ions
     "Hydrogen": ["H", "+1"],
     "Ammonium": ["NH4", "+1"],
     "Hydride": ["H", "-1"],
@@ -95,27 +95,33 @@ function parseIonAnswer(text) {
 class QuizApp {
     constructor() {
         // Define metal and non-metal/polyatomic ions
-        const metalIons = ["Sodium", "Potassium", "Silver",  "Copper (I)", "Magnesium", "Calcium", "Zinc", "Iron (II) (Ferrous)", "Copper (II)", "Lead (II)", "Barium", "Aluminium", "Iron (III) (Ferric)"];
-        const nonMetalPolyIons = ["Hydride", "Chloride", "Hydrogen", "Bromide", "Iodide", "Hydroxide", "Ammonium", "Nitrate", "Hydrogen carbonate (Bicarbonate)", "Oxide", "Sulphide", "Carbonate", "Sulphite", "Sulphate", "Nitride", "Phosphate"];
+        const metalIons = ["Sodium", "Potassium", "Silver", "Copper (I)", "Magnesium", "Calcium", "Zinc", "Iron (II) (Ferrous)", "Copper (II)", "Lead (II)", "Barium", "Aluminium", "Iron (III) (Ferric)"];
+        const nonMetalPolyIons = ["Hydrogen", "Ammonium", "Hydride", "Chloride", "Bromide", "Iodide", "Hydroxide", "Nitrate", "Hydrogen carbonate (Bicarbonate)", "Oxide", "Sulphide", "Carbonate", "Sulphite", "Sulphate", "Nitride", "Phosphate"];
 
         // Create question pools for each section
-        this.metalQuestions = metalIons.map(name => ['ion', name]).sort(() => Math.random() - 0.5);
-        this.nonMetalPolyQuestions = nonMetalPolyIons.map(name => ['ion', name]).sort(() => Math.random() - 0.5);
-        this.compoundQuestions = Object.keys(compounds).map(name => ['compound', name]).sort(() => Math.random() - 0.5);
+        this.sections = {
+            metals: { name: "Metals", questions: metalIons.map(name => ['ion', name]), index: 0 },
+            nonMetalPoly: { name: "Non-metallic and Polyatomic Ions", questions: nonMetalPolyIons.map(name => ['ion', name]), index: 0 },
+            compounds: { name: "Compounds", questions: Object.keys(compounds).map(name => ['compound', name]), index: 0 }
+        };
 
-        this.sections = [
-            { name: "Metals", questions: this.metalQuestions, index: 0 },
-            { name: "Non-metallic and Polyatomic Ions", questions: this.nonMetalPolyQuestions, index: 0 },
-            { name: "Compounds", questions: this.compoundQuestions, index: 0 }
-        ];
-        this.currentSectionIndex = 0;
+        this.selectedSection = null;
         this.score = 0;
         this.streak = 0;
         this.maxStreak = 0;
         this.wrongAnswers = [];
-        this.totalQuestions = this.metalQuestions.length + this.nonMetalPolyQuestions.length + this.compoundQuestions.length;
+        this.totalQuestions = 0;
 
         this.elements = {
+            sectionSelection: document.getElementById('section-selection'),
+            metalsButton: document.getElementById('metals-button'),
+            nonMetalPolyButton: document.getElementById('non-metal-poly-button'),
+            compoundsButton: document.getElementById('compounds-button'),
+            quizContent: document.getElementById('quiz-content'),
+            sectionChoice: document.getElementById('section-choice'),
+            redoButton: document.getElementById('redo-button'),
+            section1Button: document.getElementById('section1-button'),
+            section2Button: document.getElementById('section2-button'),
             sectionTitle: document.getElementById('section-title'),
             question: document.getElementById('question'),
             answerInput: document.getElementById('answer-input'),
@@ -124,46 +130,70 @@ class QuizApp {
             score: document.getElementById('score'),
             streak: document.getElementById('streak'),
             progress: document.getElementById('progress'),
-            quizContainer: document.getElementById('quiz-container'),
-            resultContainer: document.getElementById('result-container'),
             finalScore: document.getElementById('final-score'),
-            wrongTitle: document.getElementById('wrong-title'),
-            wrongAnswersText: document.getElementById('wrong-answers')
+            sectionChoiceWrongTitle: document.getElementById('section-choice-wrong-title'),
+            sectionChoiceWrongAnswers: document.getElementById('section-choice-wrong-answers')
         };
+
+        // Add event listeners for initial section selection
+        this.elements.metalsButton.addEventListener('click', () => this.startSection('metals'));
+        this.elements.nonMetalPolyButton.addEventListener('click', () => this.startSection('nonMetalPoly'));
+        this.elements.compoundsButton.addEventListener('click', () => this.startSection('compounds'));
         this.elements.answerInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.checkAnswer();
         });
         this.elements.submitButton.addEventListener('click', () => this.checkAnswer());
+    }
+
+    startSection(sectionKey) {
+        this.selectedSection = this.sections[sectionKey];
+        // Shuffle questions for a fresh order
+        this.selectedSection.questions = this.selectedSection.questions.sort(() => Math.random() - 0.5);
+        this.totalQuestions = this.selectedSection.questions.length;
+        this.selectedSection.index = 0;
+        this.score = 0;
+        this.streak = 0;
+        this.maxStreak = 0;
+        this.wrongAnswers = [];
+        this.elements.sectionSelection.classList.add('hidden');
+        this.elements.sectionChoice.classList.add('hidden');
+        this.elements.quizContent.classList.remove('hidden');
+        this.elements.score.textContent = `Score: 0`;
+        this.elements.streak.textContent = `🔥 Streak: 0`;
+        // Set up section choice buttons dynamically
+        this.elements.redoButton.textContent = `Redo ${this.selectedSection.name}`;
+        this.elements.redoButton.onclick = () => this.startSection(sectionKey);
+        const otherSections = Object.keys(this.sections).filter(key => key !== sectionKey);
+        this.elements.section1Button.textContent = this.sections[otherSections[0]].name;
+        this.elements.section1Button.onclick = () => this.startSection(otherSections[0]);
+        this.elements.section2Button.textContent = this.sections[otherSections[1]].name;
+        this.elements.section2Button.onclick = () => this.startSection(otherSections[1]);
         this.showQuestion();
     }
 
     showQuestion() {
-        const section = this.sections[this.currentSectionIndex];
-        if (!section || section.index >= section.questions.length) {
-            this.currentSectionIndex++;
-            if (this.currentSectionIndex >= this.sections.length) {
-                this.endQuiz();
-                return;
-            }
+        if (!this.selectedSection || this.selectedSection.index >= this.selectedSection.questions.length) {
+            this.endQuiz();
+            return;
         }
-        const currentSection = this.sections[this.currentSectionIndex];
-        if (currentSection.index < currentSection.questions.length) {
-            let [qtype, name] = currentSection.questions[currentSection.index];
-            this.elements.sectionTitle.textContent = `${currentSection.name} Section`;
-            this.elements.question.textContent = `Q${currentSection.index + 1}: ${name}`;
-            this.elements.answerInput.value = '';
-            this.elements.feedback.textContent = '';
-            this.elements.progress.textContent = `Section Progress: ${currentSection.index + 1}/${currentSection.questions.length}`;
-        } else {
-            this.currentSectionIndex++;
-            this.showQuestion();
-        }
+        let [qtype, name] = this.selectedSection.questions[this.selectedSection.index];
+        this.elements.sectionTitle.textContent = `${this.selectedSection.name} Section`;
+        this.elements.question.textContent = `Q${this.selectedSection.index + 1}: ${name}`;
+        this.elements.answerInput.value = '';
+        this.elements.feedback.textContent = '';
+        this.elements.progress.textContent = `Section Progress: ${this.selectedSection.index + 1}/${this.selectedSection.questions.length}`;
+        this.elements.sectionTitle.classList.remove('hidden');
+        this.elements.question.classList.remove('hidden');
+        this.elements.answerInput.classList.remove('hidden');
+        this.elements.submitButton.classList.remove('hidden');
+        this.elements.feedback.classList.remove('hidden');
+        this.elements.progress.classList.remove('hidden');
+        this.elements.streak.classList.remove('hidden');
     }
 
     checkAnswer() {
-        const section = this.sections[this.currentSectionIndex];
-        if (!section || section.index >= section.questions.length) return;
-        let [qtype, name] = section.questions[section.index];
+        if (!this.selectedSection || this.selectedSection.index >= this.selectedSection.questions.length) return;
+        let [qtype, name] = this.selectedSection.questions[this.selectedSection.index];
         let userAnswer = this.elements.answerInput.value.trim();
         let displayCorrect;
         if (qtype === 'ion') {
@@ -188,7 +218,7 @@ class QuizApp {
             displayCorrect = correctFormula;
             this.feedback(isCorrect, displayCorrect, userAnswer, name);
         }
-        section.index++;
+        this.selectedSection.index++;
         setTimeout(() => this.showQuestion(), 800);
     }
 
@@ -211,21 +241,15 @@ class QuizApp {
     }
 
     endQuiz() {
-        this.elements.sectionTitle.classList.add('hidden');
-        this.elements.question.classList.add('hidden');
-        this.elements.answerInput.classList.add('hidden');
-        this.elements.submitButton.classList.add('hidden');
-        this.elements.feedback.classList.add('hidden');
-        this.elements.progress.classList.add('hidden');
-        this.elements.streak.classList.add('hidden');
-        this.elements.resultContainer.classList.remove('hidden');
+        this.elements.quizContent.classList.add('hidden');
+        this.elements.sectionChoice.classList.remove('hidden');
         this.elements.finalScore.textContent = `🏆 Final Score: ${this.score}/${this.totalQuestions}\n🔥 Best Streak: ${this.maxStreak}`;
         if (this.wrongAnswers.length) {
-            this.elements.wrongTitle.textContent = 'Review of Wrong Answers:';
-            this.elements.wrongAnswersText.textContent = this.wrongAnswers.map(([q, user, correct]) => `• ${q}\n   You wrote: ${user}\n   Correct: ${correct}\n`).join('\n');
+            this.elements.sectionChoiceWrongTitle.textContent = 'Review of Wrong Answers:';
+            this.elements.sectionChoiceWrongAnswers.textContent = this.wrongAnswers.map(([q, user, correct]) => `• ${q}\n   Your Answer: ${user}\n   Correct Answer: ${correct}\n`).join('\n');
         } else {
-            this.elements.wrongTitle.textContent = '🎉 Perfect Score! No wrong answers!';
-            this.elements.wrongAnswersText.textContent = '';
+            this.elements.sectionChoiceWrongTitle.textContent = '🎉 Perfect Score! No wrong answers!';
+            this.elements.sectionChoiceWrongAnswers.textContent = '';
         }
     }
 }
